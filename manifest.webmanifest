@@ -1,0 +1,23 @@
+{
+  "name": "24 Duck Game",
+  "short_name": "24 Duck",
+  "description": "本地家庭 24 点游戏：真实照片牌面、exact solver、多解法启发。",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eef4ff",
+  "theme_color": "#0f7a3a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

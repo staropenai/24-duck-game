@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-store">
+  <title>24 Duck Game v0.5</title>
+  <link rel="stylesheet" href="style.css?v=20260623_v05">
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div>
+        <h1>24 Duck Game</h1>
+        <p>本地离线版：打开即自动发牌。支持中文括号、×、÷、全角数字和少一个末尾右括号。</p>
+      </div>
+      <span class="badge">v0.5 human math</span>
+    </header>
+
+    <section class="panel setup">
+      <label>玩家 1 名字 <input id="player1" value="玩家 1"></label>
+      <label>玩家 2 名字 <input id="player2" value="玩家 2"></label>
+      <label>时长
+        <select id="duration">
+          <option value="3">3 分钟</option>
+          <option value="5" selected>5 分钟推荐</option>
+          <option value="10">10 分钟</option>
+          <option value="30">30 分钟</option>
+          <option value="60">60 分钟正式局</option>
+        </select>
+      </label>
+      <button id="start">重新开始 / 发牌</button>
+    </section>
+
+    <section class="panel board">
+      <div id="score" class="score">比分：准备中...</div>
+      <div id="timer" class="timer">剩余时间：--</div>
+      <div id="cards" class="cards card-table">正在自动发牌...</div>
+      <div id="status" class="status">v0.5 已加载：可以输入 `（ ）`、`×`、`÷`；也可以用 `*` 和 `/`。</div>
+    </section>
+
+    <section class="panel answers">
+      <label>玩家 1 表达式 <input id="expr1" placeholder="例如：(7-3) *（1+5）"></label>
+      <button id="submit1">玩家 1 提交</button>
+      <label>玩家 2 表达式 <input id="expr2" placeholder="例如：8×（4-（10-9））"></label>
+      <button id="submit2">玩家 2 提交</button>
+    </section>
+
+    <section class="actions">
+      <button id="fill1">填入玩家 1 正确答案</button>
+      <button id="auto1">一键玩家 1 答对</button>
+      <button id="reveal">揭晓答案（不加鸭）</button>
+      <button id="next">下一题</button>
+      <button id="end">结束比赛</button>
+    </section>
+
+    <section class="panel log">
+      <h2>本地状态</h2>
+      <p id="logPath">运行方式：纯本地静态页面，不依赖后台服务。</p>
+      <p class="small">如果你看到右上角 `v0.5 human math`，说明已经不是旧缓存页面。</p>
+    </section>
+  </main>
+  <script src="app.js?v=20260623_v05_human_math"></script>
+</body>
+</html>
