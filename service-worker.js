@@ -1,4 +1,4 @@
-const CACHE_NAME = "24-duck-game-v35-pages-20260627";
+const CACHE_NAME = "24-duck-game-v36-slogan-20260627";
 const ASSETS = [
   "./",
   "./index.html",

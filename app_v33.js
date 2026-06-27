@@ -31,7 +31,7 @@ const WRONG_MESSAGES = [
 ];
 const BEST_TIME_KEY = "twenty_four_duck_best_time_seconds_v1";
 const LEARNING_LEDGER_KEY = "twenty_four_duck_learning_ledger_v1";
-const QUICK_START_KEY = "twenty_four_duck_quick_start_dismissed_v1";
+const QUICK_START_KEY = "twenty_four_duck_quick_start_dismissed_v2";
 const EXTRA_SOLUTION_REWARDS = [0, 3, 5];
 const MAX_CORRECT_PER_ROUND = 3;
 const NEW_STRATEGY_FAMILY_BONUS = 6;
