@@ -1,6 +1,5 @@
-const CACHE_NAME = "24-duck-game-v36-slogan-20260627";
-const ASSETS = [
-  "./",
+const CACHE_NAME = "24-duck-game-v38-cache-repair-20260627";
+const SAME_ORIGIN_ASSETS = [
   "./index.html",
   "./privacy.html",
   "./support.html",
@@ -10,67 +9,47 @@ const ASSETS = [
   "./twenty_four_bruteforce_catalog_v19.js",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
-  "./icons/icon-512.png",
-  "./assets/family_cards/family_card_v02_01.jpg",
-  "./assets/family_cards/family_card_v02_02.jpg",
-  "./assets/family_cards/family_card_v02_03.jpg",
-  "./assets/family_cards/family_card_v02_04.jpg",
-  "./assets/family_cards/family_card_v02_05.jpg",
-  "./assets/family_cards/family_card_v02_06.jpg",
-  "./assets/family_cards/family_card_v02_07.jpg",
-  "./assets/family_cards/family_card_v02_08.jpg",
-  "./assets/family_cards/family_card_v02_09.jpg",
-  "./assets/family_cards/family_card_v02_10.jpg",
-  "./assets/family_cards/family_card_v02_11.jpg",
-  "./assets/family_cards/family_card_v02_12.jpg",
-  "./assets/family_cards/family_card_v02_13.jpg",
-  "./assets/family_cards/family_card_v02_14.jpg",
-  "./assets/family_cards/family_card_v02_15.jpg",
-  "./assets/family_cards/family_card_v02_16.jpg",
-  "./assets/family_cards/family_card_v02_17.jpg",
-  "./assets/family_cards/family_card_v02_18.jpg",
-  "./assets/family_cards/family_card_v02_19.jpg",
-  "./assets/family_cards/family_card_v02_20.jpg",
-  "./assets/family_cards/family_card_v02_21.jpg",
-  "./assets/family_cards/family_card_v02_22.jpg",
-  "./assets/family_cards/family_card_v02_23.jpg",
-  "./assets/family_cards/family_card_v02_24.jpg",
-  "./assets/family_cards/family_card_v02_25.jpg",
-  "./assets/family_cards/family_card_v02_26.jpg",
-  "./assets/family_cards/family_card_v02_27.jpg",
-  "./assets/family_cards/family_card_v02_28.jpg",
-  "./assets/family_cards/family_card_v02_29.jpg",
-  "./assets/family_cards/family_card_v02_30.jpg",
-  "./assets/family_cards/family_card_v02_31.jpg",
-  "./assets/family_cards/family_card_v02_32.jpg",
-  "./assets/family_cards/family_card_v02_33.jpg",
-  "./assets/family_cards/family_card_v02_34.jpg",
-  "./assets/family_cards/family_card_v02_35.jpg",
-  "./assets/family_cards/family_card_v02_36.jpg",
-  "./assets/family_cards/family_card_v02_37.jpg",
-  "./assets/family_cards/family_card_v02_38.jpg",
-  "./assets/family_cards/family_card_v02_39.jpg",
-  "./assets/family_cards/family_card_v02_40.jpg",
-  "./assets/family_cards/family_card_v02_41.jpg",
-  "./assets/family_cards/family_card_v02_42.jpg",
-  "./assets/family_cards/family_card_v02_43.jpg",
-  "./assets/family_cards/family_card_v02_44.jpg",
-  "./assets/family_cards/family_card_v02_45.jpg",
-  "./assets/family_cards/family_card_v02_46.jpg"
+  "./icons/icon-512.png"
 ];
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)));
-});
-
-self.addEventListener("activate", (event) => {
+  self.skipWaiting();
   event.waitUntil(
-    caches.keys().then((names) =>
-      Promise.all(names.filter((name) => name !== CACHE_NAME).map((name) => caches.delete(name)))
+    caches.open(CACHE_NAME).then((cache) =>
+      cache.addAll(SAME_ORIGIN_ASSETS).catch(() => undefined)
     )
   );
 });
 
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches
+      .keys()
+      .then((names) => Promise.all(names.map((name) => caches.delete(name))))
+      .then(() => self.clients.claim())
+  );
+});
+
+async function networkFirst(request) {
+  const cache = await caches.open(CACHE_NAME);
+  try {
+    const fresh = await fetch(request, { cache: "no-store" });
+    if (fresh && fresh.ok && request.method === "GET") {
+      cache.put(request, fresh.clone()).catch(() => undefined);
+    }
+    return fresh;
+  } catch (error) {
+    const cached = await caches.match(request);
+    if (cached) return cached;
+    if (request.mode === "navigate") {
+      const fallback = await caches.match("./index.html");
+      if (fallback) return fallback;
+    }
+    throw error;
+  }
+}
+
 self.addEventListener("fetch", (event) => {
-  event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request)));
+  if (event.request.method !== "GET") return;
+  event.respondWith(networkFirst(event.request));
 });

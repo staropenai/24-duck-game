@@ -353,7 +353,17 @@
   <script src="app_v33.js?v=20260626_v33_strategy_route_lab"></script>
   <script>
     if ("serviceWorker" in navigator && location.protocol !== "file:") {
-      navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+      let swRefreshing = false;
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        if (swRefreshing || sessionStorage.getItem("twenty_four_duck_sw_reloaded_v38")) return;
+        swRefreshing = true;
+        sessionStorage.setItem("twenty_four_duck_sw_reloaded_v38", "1");
+        window.location.reload();
+      });
+      navigator.serviceWorker
+        .register("./service-worker.js?v=20260627_v38_cache_repair")
+        .then((registration) => registration.update())
+        .catch(() => {});
     }
   </script>
 </body>
